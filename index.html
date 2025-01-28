@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>table.new</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 20px;
+      }
+      table {
+        border-collapse: collapse;
+        margin: 10px 0;
+      }
+      th,
+      td {
+        border: 1px solid #999;
+        padding: 5px;
+      }
+      input,
+      button {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>table.new</h1>
+    <div>
+      <input id="tableName" placeholder="Table name" />
+      <input id="cols" type="number" value="3" min="1" />
+      <input id="rows" type="number" value="3" min="1" />
+      <button onclick="createTable()">Add Table</button>
+    </div>
+    <div id="tables"></div>
+    <script>
+      function createTable() {
+        const name = document.getElementById("tableName").value || "Untitled";
+        const cols = +document.getElementById("cols").value;
+        const rows = +document.getElementById("rows").value;
+
+        const wrapper = document.createElement("div");
+        const title = document.createElement("h2");
+        title.textContent = name;
+        wrapper.appendChild(title);
+
+        const table = document.createElement("table");
+        const headerRow = table.insertRow();
+        for (let c = 0; c < cols; c++) {
+          const th = document.createElement("th");
+          th.contentEditable = true;
+          th.textContent = `Col ${c + 1}`;
+          headerRow.appendChild(th);
+        }
+        for (let r = 0; r < rows; r++) {
+          const row = table.insertRow();
+          for (let c = 0; c < cols; c++) {
+            const cell = row.insertCell();
+            cell.contentEditable = true;
+          }
+        }
+
+        const addRowBtn = document.createElement("button");
+        addRowBtn.textContent = "Add Row";
+        addRowBtn.onclick = () => {
+          const row = table.insertRow();
+          for (let c = 0; c < table.rows[0].cells.length; c++) {
+            const cell = row.insertCell();
+            cell.contentEditable = true;
+          }
+        };
+
+        const addColBtn = document.createElement("button");
+        addColBtn.textContent = "Add Column";
+        addColBtn.onclick = () => {
+          const colCount = table.rows[0].cells.length;
+          const th = document.createElement("th");
+          th.contentEditable = true;
+          th.textContent = `Col ${colCount + 1}`;
+          table.rows[0].appendChild(th);
+          for (let r = 1; r < table.rows.length; r++) {
+            const cell = table.rows[r].insertCell();
+            cell.contentEditable = true;
+          }
+        };
+
+        wrapper.appendChild(table);
+        wrapper.appendChild(addRowBtn);
+        wrapper.appendChild(addColBtn);
+        document.getElementById("tables").appendChild(wrapper);
+      }
+    </script>
+  </body>
+</html>
