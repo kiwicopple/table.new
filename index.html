@@ -83,10 +83,39 @@
           }
         };
 
+        const copyAsMarkdownBtn = document.createElement("button");
+        copyAsMarkdownBtn.textContent = "Copy as Markdown";
+        copyAsMarkdownBtn.onclick = () => {
+          const markdown = tableToMarkdown(table);
+          navigator.clipboard.writeText(markdown).then(() => {
+            alert("Table copied as markdown!");
+          });
+        };
+
         wrapper.appendChild(table);
         wrapper.appendChild(addRowBtn);
         wrapper.appendChild(addColBtn);
+        wrapper.appendChild(copyAsMarkdownBtn);
         document.getElementById("tables").appendChild(wrapper);
+      }
+
+      function tableToMarkdown(table) {
+        let markdown = "";
+        const rows = table.rows;
+        for (let i = 0; i < rows.length; i++) {
+          const cells = rows[i].cells;
+          for (let j = 0; j < cells.length; j++) {
+            markdown += `| ${cells[j].textContent} `;
+          }
+          markdown += "|\n";
+          if (i === 0) {
+            for (let j = 0; j < cells.length; j++) {
+              markdown += "| --- ";
+            }
+            markdown += "|\n";
+          }
+        }
+        return markdown;
       }
     </script>
   </body>
